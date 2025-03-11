@@ -1,21 +1,20 @@
-# Use Python base image
-FROM python:3.9
+# Use the official Python image from DockerHub
+FROM python:3.9-slim
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy necessary files
-COPY requirements.txt requirements.txt
-COPY app.py app.py
-COPY templates templates
-COPY static static
-COPY inventory.csv inventory.csv
+# Copy all the project files into the container
+COPY . .
 
 # Install dependencies
 RUN pip install -r requirements.txt
 
-# Expose port
+# Expose the port the app runs on
 EXPOSE 5000
 
+# Define environment variable
+ENV FLASK_APP=app.py
+
 # Run the application
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["python", "app.py"]
